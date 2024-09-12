@@ -81,8 +81,12 @@ if geojson_files:
 if mapping_file:
     df_mouse_mapping = create_dataframe_from_txt(mapping_file)
 
+    cd8_threshold = st.number_input(label="CD8 threshold", value=25)
+    cd4_threshold = st.number_input(label="CD4 threshold", value=30)
+    foxp3_threshold = st.number_input(label="Foxp3 threshold", value=20)
+
 if mapping_file and geojson_files:
-    final_query = """
+    final_query = f"""
     select
         m.mouse_id
         , c.image_number
@@ -98,11 +102,11 @@ if mapping_file and geojson_files:
         c.image_number = m.image_number
     where
         (
-            ("properties.classification.name" = 'CD8' and "properties.measurements.Area µm^2" >= 25)
+            ("properties.classification.name" = 'CD8' and "properties.measurements.Area µm^2" >= {cd8_threshold})
             or
-            ("properties.classification.name" = 'CD4' and "properties.measurements.Area µm^2" >= 30)
+            ("properties.classification.name" = 'CD4' and "properties.measurements.Area µm^2" >= {cd4_threshold})
             or
-            ("properties.classification.name" = 'Foxp3' and "properties.measurements.Area µm^2" >= 20)
+            ("properties.classification.name" = 'Foxp3' and "properties.measurements.Area µm^2" >= {foxp3_threshold})
         )
         and "properties.classification.name" != 'Other'
     group by 1, 2
