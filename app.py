@@ -2,6 +2,11 @@ import duckdb
 import pandas as pd
 import streamlit as st
 
+# write version
+st.write(f"streamlit version: {st.__version__}")
+st.write(f"duckdb version: {duckdb.__version__}")
+st.write(f"pandas version: {pd.__version__}")
+
 
 def get_image_number(file_path) -> str:
     file_name = file_path.name
